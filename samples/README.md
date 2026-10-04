@@ -52,6 +52,6 @@ These need your own public repository and network access.
 | ID | Input | Phase | Expected result |
 |----|-------|-------|-----------------|
 | M10 | Your final submission folder, zipped, with the code archive created from the current state of the repository and `links.txt` naming that repository | 3 | R07 **pass**: `All N files in the code archive are identical to <user>/<repo>` |
-| M11 | As M10, but after zipping, edit one line of `app/main.py` in the repository and push | 3 | R07 **fail**: message names `app/main.py` under `with different content` |
-| M12 | As M10, with the repository visibility switched to Private | 3 | R07 **fail**: `does not exist or is not public` |
-| M13 | As M10, run on a machine with networking disabled | 3 | R07 **warn**: `GitHub could not be reached`; all other rules still evaluated |
+| M11 | As M10, but with one line of `app/main.py` changed inside the code archive only | 3 | R07 **fail**: message names `app/main.py` under `with different content` |
+| M12 | As M10, with `links.txt` naming a repository that is not public (private or non-existent; GitHub answers both with 404) | 3 | R07 **fail**: `does not exist or is not public` |
+| M13 | As M10, run locally with connections to GitHub refused (for example `HTTPS_PROXY=http://127.0.0.1:9`) | 3 | R07 **warn**: `GitHub could not be reached`; all other rules still evaluated |

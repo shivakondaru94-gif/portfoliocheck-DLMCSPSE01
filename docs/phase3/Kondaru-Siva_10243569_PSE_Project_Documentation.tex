@@ -11,7 +11,7 @@
 %   screenshots/test_run.jpg                      Figure 5
 %   screenshots/start_page.jpg                    Figure 6
 %   screenshots/report_M05.jpg                    Figure 7
-%   screenshots/render_live.png    (to be added)  Figure 8
+%   screenshots/render_live.jpg  Figure 8
 % =====================================================================
 \documentclass[a4paper,11pt]{article}
 
@@ -154,7 +154,8 @@ and returns a report in which every problem is paired with the exact correction
 required and with the provision of the brief it derives from. The most
 distinctive rule compares the submitted code archive with the public GitHub
 repository file by file, using the content hashes that git itself uses. The
-project was managed with Kanban in GitHub Projects, the architecture is
+project was managed with Kanban, with the board moved into GitHub Projects after
+the Phase~2 feedback, the architecture is
 documented in three views including a UML component diagram, and the application
 is verified by 73 automated tests and thirteen manual test cases. All thirteen
 functional requirements are implemented. The document closes with the remaining
@@ -392,44 +393,41 @@ was rejected because its events and roles presuppose a team
 backlog, limited work in progress and regular review --- without the ceremony
 \citep{Ambler2022}.
 
-The board was kept in GitHub Projects, next to the source code
-\citep{GitHubProjects2025}. Each work package of Table~\ref{tab:workpackages} is
-an issue on the board, labelled with its phase and the requirements it delivers;
-WP6 was split into one sub-issue per rule. The board has the columns
-\textit{Backlog}, \textit{In progress}, \textit{In review} and \textit{Done},
-with a work-in-progress limit of one on \textit{In progress}. Day to day, each
-working session started by pulling the top backlog card into \textit{In
-progress}, which was only allowed when that column was empty. Commits referenced
-the issue number, so each card shows its own history. A card moved to
-\textit{In review} once its code and tests were written, and to \textit{Done}
-once the test suite passed and the card had been checked against its
-requirements. Once a week the whole board was reviewed and the backlog
-re-prioritised against the next milestone \citep{Kim2021}.
+In the first two phases the work packages were tracked on a drawn board, which
+the Phase~2 feedback rightly criticised: a drawing records intentions, not what
+actually happened. In the finalisation phase the board was therefore moved into
+GitHub Projects, attached to the project repository \citep{GitHubProjects2025}.
+Each work package of Table~\ref{tab:workpackages} is now an issue in the
+repository whose description states its phase, its deliverable, the requirements
+it delivers and its planned dates, and all eleven issues are collected in the
+project \textit{PortfolioCheck}, shown as a board with the columns \textit{Todo},
+\textit{In Progress} and \textit{Done}. The work packages already completed,
+WP1 to WP9, were entered as issues and closed; GitHub's built-in project workflow
+moves a closed issue to \textit{Done} automatically. WP11 is in progress, and
+WP10, the cloud deployment, is the next item. From this point on the board is the
+working record: an item moves to \textit{In Progress} when work on it starts, and
+it is closed --- and thereby moved to \textit{Done} --- only once its tests pass
+and it has been checked against its requirements \citep{Kim2021}.
 
-The labels are what connect the board to the rest of this document. Every card
-carries a phase label and one label per requirement it delivers, such as
-\texttt{FR12} or \texttt{NFR1}, so filtering the board by a requirement shows the
-work that implemented it, and the \textit{Requirements} column of
-Table~\ref{tab:workpackages} can be read off the board directly. At each
-milestone the board was compared with the table, so that plan and board stayed
-consistent throughout, which was the point raised in the Phase~2 feedback
-\citep{GitHubProjects2025}.
-Figure~\ref{fig:kanban} shows the board at the end of the project and one
-work-package card.
+Because every card names the requirements it delivers, the board can be read
+directly against Table~\ref{tab:workpackages} and Table~\ref{tab:requirements},
+which resolves the inconsistency between the drawn board and the work-package
+table pointed out in the Phase~2 feedback \citep{GitHubProjects2025}.
+Figure~\ref{fig:kanban} shows the board and one work-package card.
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}{\textwidth}
 \centering
-\screenshot{screenshots/kanban_board.png}{0.92\textwidth}{GitHub Projects board with the columns Backlog, In progress, In review, Done and the cards WP1--WP11}
-\caption{Board at the end of the project}
+\screenshot{screenshots/kanban_board.jpg}{0.95\textwidth}{GitHub Projects board}
+\caption{Board with the work packages WP1--WP11}
 \end{subfigure}
 
 \vspace{0.4cm}
 \begin{subfigure}{\textwidth}
 \centering
-\screenshot{screenshots/kanban_card.png}{0.7\textwidth}{One work-package issue opened, showing its labels (phase, requirements) and linked commits}
-\caption{Work-package card with requirement labels}
+\screenshot{screenshots/kanban_card.jpg}{0.95\textwidth}{Work-package issue}
+\caption{Work-package card WP9 with its deliverable, requirement and project status}
 \end{subfigure}
 \caption{Kanban board in GitHub Projects}
 \label{fig:kanban}
@@ -945,26 +943,28 @@ M08 & \texttt{M08}: entry \nolinkurl{../outside-the-upload-folder.txt} & any & E
 \hline
 M09 & \texttt{M09}: text file renamed to \texttt{.zip} & any & Error page: \textit{not a valid ZIP archive} & Pass \\
 \hline
-M10 & Final submission; code archive made from the repository & 3 & R07 pass: \textit{All N files \ldots\ are identical} & \textcolor{red}{[ ]} \\
+M10 & Phase~3 submission; code archive made from the repository with \texttt{git archive} & 3 & R07 pass: \textit{All N files \ldots\ are identical} & Pass \\
 \hline
-M11 & As M10, then one line of \nolinkurl{app/main.py} changed and pushed & 3 & R07 fail naming \nolinkurl{app/main.py} & \textcolor{red}{[ ]} \\
+M11 & As M10, one line of \nolinkurl{app/main.py} changed in the code archive only & 3 & R07 fail naming \nolinkurl{app/main.py} & Pass \\
 \hline
-M12 & As M10, repository set to Private & 3 & R07 fail: \textit{does not exist or is not public} & \textcolor{red}{[ ]} \\
+M12 & As M10, links file naming a repository that is not publicly visible & 3 & R07 fail: \textit{does not exist or is not public} & Pass \\
 \hline
-M13 & As M10, network disconnected & 3 & R07 warn: \textit{GitHub could not be reached} & \textcolor{red}{[ ]} \\
+M13 & As M10, GitHub unreachable (connection refused) & 3 & R07 warn: \textit{GitHub could not be reached} & Pass \\
 \hline
 \end{tabularx}
 \end{table}
 
-Cases M10 to M13 test R07 against the real repository and are therefore run
-after deployment. For M10, the final submission folder is zipped with a code
-archive created from the current state of the repository, and the check is
-expected to confirm that all files are identical. M11 then changes one line of a
-source file in the repository only, and the check must name exactly that file.
-M12 switches the repository to private for a moment, and M13 disconnects the
-network; in both, the other rules must still produce their findings. Together
-these four cases exercise every outcome of R07 on real data rather than on the
-simulation used in the automated tests \citep{Winters2020}.
+Cases M10 to M13 test R07 against the real repository and were run after
+deployment, M10 to M12 on the deployed application itself. For M10, the code
+archive was created from the current state of the repository, and the check
+confirmed that all 66 files are identical. M11 changes one line of a source file
+in the archive only, and the check named exactly that file. M12 names a repository
+address that GitHub does not serve publicly; GitHub answers a private and a
+non-existent repository with the same response, so this case covers both. M13 was
+run locally with every connection to GitHub refused; R07 degraded to a warning
+while the other six rules still produced their findings. Together these four
+cases exercise every outcome of R07 on real data rather than on the simulation
+used in the automated tests \citep{Winters2020}.
 
 The test data was designed with three properties. Each sample differs from the
 compliant one in exactly one respect, so a failure can only have one cause. The
@@ -1084,13 +1084,13 @@ used by R07. Keeping installation to one command is what makes the application
 usable by an examiner without assistance \citep{Kim2021}.
 
 \begin{itemize}[itemsep=0pt]
-\item \textbf{Application:} \texttt{[RENDER URL]}
-\item \textbf{Repository:} \texttt{[GITHUB URL]}
+\item \textbf{Application:} \url{https://portfoliocheck-bwwq.onrender.com}
+\item \textbf{Repository:} \url{https://github.com/shivakondaru94-gif/portfoliocheck-DLMCSPSE01}
 \end{itemize}
 
 \begin{figure}[H]
 \centering
-\screenshot{screenshots/render_live.png}{0.85\textwidth}{Render dashboard showing the service as Live, or the application opened at its public URL}
+\screenshot{screenshots/render_live.jpg}{0.97\textwidth}{Render dashboard showing the service as Live}
 \caption{The application deployed on Render}
 \label{fig:render}
 \end{figure}
@@ -1158,8 +1158,8 @@ instead of kept in a tool, and the Phase~2 feedback showed why that was wrong: a
 drawing shows intentions, while a board linked to commits shows what happened
 \citep{GitHubProjects2025}.
 
-\textit{Method.} The work-in-progress limit of one mattered more than expected,
-because it stopped the rule set from growing faster than its tests
+\textit{Method.} Working on one work package at a time mattered more than
+expected, because it stopped the rule set from growing faster than its tests
 \citep{Ambler2022}. Writing each test together with its rule meant that the late
 addition of R07 could not break R01--R06 unnoticed, and building the extraction
 defences before any rule meant they never had to be added afterwards

@@ -12,7 +12,7 @@ you, rule by rule, what passes and exactly what to change.
 
 It checks form, not content. It does not assess or grade your work.
 
-- **Live application:** _add the Render URL here after deployment_
+- **Live application:** https://portfoliocheck-bwwq.onrender.com
 - **Course:** Project: Software Engineering (DLMCSPSE01)
 - **Version:** 1.0.0
 
