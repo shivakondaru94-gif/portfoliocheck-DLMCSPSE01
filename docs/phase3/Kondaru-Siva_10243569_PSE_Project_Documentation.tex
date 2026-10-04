@@ -753,8 +753,11 @@ RepositoryClient & \texttt{app/repository.py} & GitHub file list and blob hashes
 
 \textbf{Deployment view.} Figure~\ref{fig:deployment} shows where the system runs.
 The container built from the repository's Dockerfile runs as a web service on
-Render; a push to the main branch triggers a new build, and the running container
-reaches GitHub only through its public API. This view documents the environment
+Render; each deployment builds the image from the main branch, and the running
+container reaches GitHub only through its public API. The container always runs
+under an unprivileged user; the read-only filesystem with \texttt{/tmp} in memory
+is set by the Docker Compose configuration for local and self-hosted use, since
+the Render blueprint does not configure it. This view documents the environment
 that NFR4 and NFR9 constrain \citep{Render2025}.
 
 \begin{figure}[H]
@@ -769,13 +772,13 @@ that NFR4 and NFR9 constrain \citep{Render2025}.
 \node[anchor=north west, font=\tiny\bfseries] at (4.7,1.3) {$\ll$container$\gg$ portfoliocheck (Docker)};
 \node[node3d, fill=blue!10, minimum width=2.4cm] (uv) at (6.1,-0.2) {Uvicorn\\ASGI server};
 \node[node3d, fill=blue!10, minimum width=2.4cm] (app) at (9.0,-0.2) {PortfolioCheck\\application};
-\node[font=\tiny, black!60] at (7.6,-1.2) {read-only filesystem, /tmp in memory, unprivileged user};
+\node[font=\tiny, black!60] at (7.6,-1.2) {unprivileged user (read-only filesystem with Docker Compose)};
 \draw[flow] (uv) -- (app);
 \node[node3d, minimum width=2.8cm, minimum height=1.3cm] (api) at (14.2,0) {$\ll$external$\gg$\\\textbf{GitHub}\\REST API};
 \node[node3d, minimum width=2.8cm] (repo) at (7.6,3.2) {$\ll$artifact$\gg$ public repository\\Dockerfile, source code};
 \draw[flow] (browser.east) -- node[above, font=\tiny] {HTTPS} (4.0,0);
 \draw[flow] (11.2,0) -- node[above, font=\tiny] {HTTPS (R07)} (api.west);
-\draw[flow] (repo.south) -- node[right, font=\tiny] {push triggers build} (7.6,1.9);
+\draw[flow] (repo.south) -- node[right, font=\tiny] {image built on deploy} (7.6,1.9);
 \end{tikzpicture}}
 \caption{Deployment view (UML deployment notation)}
 \label{fig:deployment}
