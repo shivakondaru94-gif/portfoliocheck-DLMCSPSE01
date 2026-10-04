@@ -94,6 +94,8 @@
 
 % Shared table setup
 \newcommand{\tablesetup}{\footnotesize\renewcommand{\arraystretch}{1.2}\setlength{\tabcolsep}{4pt}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\tabularxcolumn}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 \begin{document}
 
@@ -256,7 +258,7 @@ portfolio phases \citep{Bass2021}.
 \caption{Phase 2 feedback and how it was addressed}
 \label{tab:changes}
 \tablesetup
-\begin{tabularx}{\textwidth}{|c|p{5.4cm}|X|}
+\begin{tabularx}{\textwidth}{|c|L{5.4cm}|X|}
 \hline
 \rowcolor{gray!15}
 \textbf{No.} & \textbf{Feedback} & \textbf{How it was addressed} \\
@@ -328,7 +330,7 @@ directly against the requirements in Table~\ref{tab:requirements}
 \caption{Work packages with dates, deliverables and requirements}
 \label{tab:workpackages}
 \tablesetup
-\begin{tabularx}{\textwidth}{|c|p{3.0cm}|X|p{2.4cm}|p{2.1cm}|}
+\begin{tabularx}{\textwidth}{|c|L{3.0cm}|X|L{2.4cm}|L{2.1cm}|}
 \hline
 \rowcolor{gray!15}
 \textbf{WP} & \textbf{Work package} & \textbf{Deliverable} & \textbf{Requirements} & \textbf{Dates (2026)} \\
@@ -416,7 +418,7 @@ which resolves the inconsistency between the drawn board and the work-package
 table pointed out in the Phase~2 feedback \citep{GitHubProjects2025}.
 Figure~\ref{fig:kanban} shows the board and one work-package card.
 
-\begin{figure}[H]
+\begin{figure}[!t]
 \centering
 \begin{subfigure}{\textwidth}
 \centering
@@ -445,7 +447,7 @@ than written once \citep{Sommerville2020}.
 \caption{Risk register with mitigation and final status}
 \label{tab:risks}
 \tablesetup
-\begin{tabularx}{\textwidth}{|c|p{3.4cm}|c|c|X|p{1.6cm}|}
+\begin{tabularx}{\textwidth}{|c|L{3.4cm}|c|c|X|L{1.6cm}|}
 \hline
 \rowcolor{gray!15}
 \textbf{ID} & \textbf{Risk} & \textbf{Prob.} & \textbf{Impact} & \textbf{Mitigation} & \textbf{Status} \\
@@ -497,7 +499,7 @@ which turns the table into a record of what the system has been shown to do
 \caption{Requirements with priority and verifying evidence}
 \label{tab:requirements}
 \tablesetup
-\begin{tabularx}{\textwidth}{|c|X|c|p{4.6cm}|}
+\begin{tabularx}{\textwidth}{|c|X|c|L{4.6cm}|}
 \hline
 \rowcolor{gray!15}
 \textbf{ID} & \textbf{Requirement} & \textbf{Prio.} & \textbf{Verified by} \\
@@ -698,7 +700,7 @@ be found in the code as described \citep{Bass2021}.
 \caption{Components and the source modules that implement them}
 \label{tab:mapping}
 \tablesetup
-\begin{tabularx}{\textwidth}{|p{3.0cm}|p{5.8cm}|X|}
+\begin{tabularx}{\textwidth}{|L{3.0cm}|L{5.8cm}|X|}
 \hline
 \rowcolor{gray!15}
 \textbf{Component} & \textbf{Source module} & \textbf{Responsibility} \\
@@ -809,12 +811,12 @@ report, and a separate JavaScript application would have added a second build,
 a second deployment artifact and an interface contract to maintain
 \citep{Richards2020}.
 
-\begin{table}[H]
+\begin{table}[!t]
 \centering
 \caption{Technology stack with alternatives and rationale}
 \label{tab:stack}
 \tablesetup
-\begin{tabularx}{\textwidth}{|p{2.0cm}|p{2.9cm}|p{2.3cm}|X|}
+\begin{tabularx}{\textwidth}{|L{2.0cm}|L{2.9cm}|L{2.3cm}|X|}
 \hline
 \rowcolor{gray!15}
 \textbf{Decision} & \textbf{Selected} & \textbf{Alternatives} & \textbf{Rationale} \\
@@ -921,7 +923,7 @@ output of the application for each of the cases M01--M09.
 \caption{Manual test cases with input, expected behaviour and result}
 \label{tab:manual}
 \tablesetup
-\begin{tabularx}{\textwidth}{|c|p{4.6cm}|c|X|c|}
+\begin{tabularx}{\textwidth}{|c|L{4.6cm}|c|X|c|}
 \hline
 \rowcolor{gray!15}
 \textbf{ID} & \textbf{Input} & \textbf{Ph.} & \textbf{Expected behaviour} & \textbf{Result} \\
@@ -997,7 +999,7 @@ application. Figure~\ref{fig:pytest} shows a complete run in which all 73 tests
 pass; the suite was also run from a clean extraction of the submission archive
 to confirm that the published code is self-contained \citep{Pytest2025}.
 
-\begin{figure}[tbp]
+\begin{figure}[!htbp]
 \centering
 \screenshot{screenshots/test_run.jpg}{0.52\textwidth}{pytest run}
 \caption{Automated test run: all 73 tests pass}
@@ -1013,7 +1015,7 @@ before uploading anything (FR13). The link below the form downloads an empty,
 correctly named folder structure for students starting from nothing (FR10)
 \citep{Sommerville2020}.
 
-\begin{figure}[tbp]
+\begin{figure}[!ht]
 \centering
 \screenshot{screenshots/start_page.jpg}{0.62\textwidth}{Start page}
 \caption{Start page with upload form and rule catalogue}
@@ -1030,7 +1032,7 @@ until those are fixed. Failures come first, each with its correction and the
 chapter of the brief it derives from (FR8, FR11), which is the behaviour the
 project set out to deliver \citep{Messer2024}.
 
-\begin{figure}[tbp]
+\begin{figure}[!htbp]
 \centering
 \screenshot{screenshots/report_M05.jpg}{0.5\textwidth}{Report for M05}
 \caption{Report for sample M05 checked as phase 3}
@@ -1113,7 +1115,7 @@ remains, ordered by its effect on maintenance \citep{Lenarduzzi2021}.
 \caption{Open technical debt}
 \label{tab:debt}
 \tablesetup
-\begin{tabularx}{\textwidth}{|c|p{4.4cm}|X|p{3.4cm}|}
+\begin{tabularx}{\textwidth}{|c|L{4.4cm}|X|L{3.4cm}|}
 \hline
 \rowcolor{gray!15}
 \textbf{ID} & \textbf{Shortcut} & \textbf{Consequence} & \textbf{Repayment} \\
@@ -1204,7 +1206,7 @@ days before a deadline \citep{Ford2021}.
 % =====================================================================
 % REFERENCES
 % =====================================================================
-\section*{References}
+\clearpage
 \addcontentsline{toc}{section}{References}
 
 \begin{thebibliography}{99}
