@@ -232,10 +232,11 @@ exactly what must be changed. That last element is decisive: feedback that names
 the correction is what gives automated assessment its practical value, whereas a
 bare verdict merely restates the problem \citep{Combefis2022}.
 
-The document follows the course of the project. Chapter~\ref{sec:management}
+The document follows the course of the project. Section~\ref{sec:theory}
+summarises the theory the project builds on. Chapter~\ref{sec:management}
 describes how the project was organised: its profile, the work packages and their
 dates, the Kanban workflow and the risks. Chapter~\ref{sec:reqarch} states what
-the system must do and how it is built: the requirements, the glossary, three
+the system must do and how it is built: the requirements, the glossary, two UML
 architecture views and the technology stack. Chapter~\ref{sec:impl} reports what
 was built and shows that it works: the implementation, the manual and automated
 tests, the results and the deployment. Chapter~\ref{sec:reflection} closes with
@@ -250,7 +251,7 @@ submission. Table~\ref{tab:changes} shows how each point of the Phase~2 feedback
 was addressed, so that the development of the work remains traceable across the
 portfolio phases \citep{Bass2021}.
 
-\begin{table}[H]
+\begin{table}[!t]
 \centering
 \caption{Phase 2 feedback and how it was addressed}
 \label{tab:changes}
@@ -276,6 +277,87 @@ portfolio phases \citep{Bass2021}.
 \hline
 \end{tabularx}
 \end{table}
+
+\subsection{Theoretical Background}\label{sec:theory}
+
+This section summarises the concepts from software engineering and related
+fields on which the design decisions of the following chapters rest. Each
+concept is introduced only as far as the project uses it.
+
+\textbf{Automated assessment and feedback.} Automated assessment tools evaluate
+student work against a specification without a human grader, which makes the
+evaluation fast, repeatable and available at any time
+\citep{Paiva2022}. Their pedagogical value, however, depends less on the
+verdict than on the feedback attached to it: reviews of grading tools
+consistently find that a bare pass or fail helps a student far less than a
+message that locates the problem and states how to correct it
+\citep{Messer2024}. Most tools of this kind judge program behaviour through test
+cases or static analysis; checking the formal envelope of a submission is a
+neighbouring but distinct problem, because the rules are fixed by an
+examination regulation rather than by a programming exercise
+\citep{Combefis2022}. PortfolioCheck adopts the feedback principle of this
+literature and applies it to that envelope.
+
+\textbf{Requirements and quality models.} Requirements engineering separates
+what a system must do, the functional requirements, from the qualities with
+which it must do it, the non-functional requirements. A requirement is only
+useful if it is verifiable, that is, if a test or review can show whether it is
+met \citep{Sommerville2020}. Non-functional requirements are easier to state
+completely when they follow a quality model; ISO/IEC 25010 structures product
+quality into characteristics such as security, performance efficiency,
+usability, maintainability, reliability and portability
+\citep{ISO25010}. Agile methods add prioritisation: the MoSCoW scheme ranks
+requirements as \textit{Must}, \textit{Should}, \textit{Could} or
+\textit{Won't}, so that the scope can shrink under time pressure without losing
+the core \citep{Ambler2022}.
+
+\textbf{Software architecture.} A software architecture describes the
+components of a system, their responsibilities and the dependencies between
+them, and it is judged by the quality attributes it enables
+\citep{Bass2021}. Layered architectures that place the domain model at the
+centre and let it depend on nothing keep the business rules testable without
+infrastructure; dependencies point inwards, towards the more stable code
+\citep{Percival2020}. Every architectural style is a trade-off: a monolith
+deployed as one unit is simpler to build, test and operate than distributed
+services, which often makes it the better choice for a small system built by a
+single team \citep{Richards2020}.
+
+\textbf{Secure handling of untrusted input.} Any data that crosses the system
+boundary must be treated as hostile until it has been validated; injection and
+insecure design rank among the most common causes of web application
+vulnerabilities \citep{OWASP2021}. Archives pose two specific threats. A
+\textit{path traversal} entry such as \texttt{../../etc/passwd} writes outside
+the extraction folder when the archive is unpacked, and a
+\textit{decompression bomb} expands a small upload into gigabytes that exhaust
+memory or disk. Secure development frameworks therefore recommend secure coding
+practices that validate all input before it is processed, which for archives
+means inspecting them against explicit limits before anything is extracted
+\citep{NIST2022}.
+
+\textbf{Content addressing in version control.} Git stores every file as a
+\textit{blob} identified by the SHA-1 hash of a short header and the file's
+content. Two files with the same hash have the same content, whatever their name
+or timestamp, which is what lets git detect changes without comparing files
+byte by byte \citep{Chacon2024}. Because the GitHub REST API returns these
+hashes for every file of a repository tree, the content of a repository can be
+compared with local files without downloading them \citep{GitHubAPI2025}.
+
+\textbf{Testing.} Automated tests are commonly arranged as a pyramid: many fast
+unit tests at the base, fewer integration tests above them and only a few
+end-to-end tests at the top, because the cost and fragility of a test grow with
+the amount of the system it exercises \citep{Winters2020}. A good unit test
+protects against regressions, resists refactoring and runs fast; external
+services are replaced by test doubles so that the suite does not depend on the
+network \citep{Khorikov2020}.
+
+\textbf{Process and technical debt.} Kanban manages work as a flow: work items
+move across a visible board, work in progress is limited, and the process is
+improved continuously, without the fixed roles and events of Scrum
+\citep{Kim2021, Schwaber2020}. Technical debt describes the shortcuts taken in
+the implementation that make later change more expensive; like financial debt,
+it accrues interest until it is repaid \citep{Avgeriou2023}. Managing it means
+recording each item and prioritising repayment by its effect on further
+development \citep{Lenarduzzi2021}.
 
 % =====================================================================
 \section{Project Management}\label{sec:management}
