@@ -1,0 +1,22 @@
+services:
+  web:
+    build: .
+    image: portfoliocheck:1.0.0
+    ports:
+      - "8000:8000"
+    environment:
+      PORT: "8000"
+      # Uvicorn worker count; one is plenty for the expected load.
+      WEB_CONCURRENCY: "1"
+      # Optional. Raises GitHub's anonymous limit of 60 requests per hour used
+      # by the repository comparison (R07). Needs no scopes. Leave unset to run
+      # anonymously.
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+    restart: unless-stopped
+    # Submissions are extracted to a temporary directory, so the container
+    # filesystem itself can stay read-only (NFR4).
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m
+    security_opt:
+      - no-new-privileges:true

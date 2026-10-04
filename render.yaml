@@ -1,0 +1,15 @@
+# Render Blueprint: deploys the Dockerfile in this repository as a public web
+# service. In the Render dashboard choose New > Blueprint and select this
+# repository; Render reads this file and builds the container.
+services:
+  - type: web
+    name: portfoliocheck
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      # Optional, set in the dashboard: raises the GitHub API rate limit for R07.
+      - key: GITHUB_TOKEN
+        sync: false

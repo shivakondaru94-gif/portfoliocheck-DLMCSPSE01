@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}PortfolioCheck{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">PortfolioCheck</a>
+    <p class="tagline">Check your portfolio submission against the formal requirements &mdash; before you hand it in.</p>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>
+      An independent student tool. It checks the formal requirements only &mdash;
+      it does not assess the content of your work.
+    </p>
+  </footer>
+</body>
+</html>

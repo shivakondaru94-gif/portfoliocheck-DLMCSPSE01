@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Report &mdash; PortfolioCheck{% endblock %}
+
+{% block content %}
+<section class="card summary summary--{{ report.overall.value }}">
+  <h1>
+    {% if report.overall.value == "pass" %}Ready to submit
+    {% elif report.overall.value == "warn" %}Almost there
+    {% else %}Not ready to submit{% endif %}
+  </h1>
+  <p class="lede">
+    {{ report.submission_name }}
+    {% if report.phase %}&middot; checked as phase {{ report.phase }}{% endif %}
+  </p>
+  <ul class="tally">
+    <li class="tally-fail">{{ report.fails }} must fix</li>
+    <li class="tally-warn">{{ report.warns }} to review</li>
+    <li class="tally-pass">{{ report.passes }} passed</li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Findings</h2>
+  <ol class="findings">
+    {% for finding in report.sorted_findings %}
+    <li class="finding finding--{{ finding.severity.value }}">
+      <div class="finding-head">
+        <span class="rule-id">{{ finding.rule_id }}</span>
+        <strong>{{ finding.title }}</strong>
+        <span class="status status--{{ finding.severity.value }}">{{ finding.severity.value }}</span>
+      </div>
+      <p class="message">{{ finding.message }}</p>
+      {% if finding.fix %}
+      <p class="fix"><strong>How to fix:</strong> {{ finding.fix }}</p>
+      {% endif %}
+      {% if finding.reference %}
+      <p class="reference">Source: {{ finding.reference }}</p>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<p class="secondary"><a href="/">Check another submission</a></p>
+{% endblock %}

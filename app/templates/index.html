@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if error %}
+<div class="alert" role="alert">{{ error }}</div>
+{% endif %}
+
+<section class="card">
+  <h1>Check your submission</h1>
+  <p class="lede">
+    Upload the zip folder you are about to submit. Every file stays in memory for
+    the duration of the check and is deleted immediately afterwards.
+  </p>
+
+  <form action="/check" method="post" enctype="multipart/form-data">
+    <label for="submission">Your zip folder</label>
+    <input type="file" id="submission" name="submission" accept=".zip" required>
+
+    <label for="phase">Portfolio phase</label>
+    <select id="phase" name="phase">
+      <option value="">All checks (no phase selected)</option>
+      <option value="1">Phase 1 &mdash; Conception</option>
+      <option value="2">Phase 2 &mdash; Development / reflection</option>
+      <option value="3">Phase 3 &mdash; Finalization</option>
+    </select>
+
+    <button type="submit">Check submission</button>
+  </form>
+
+  <p class="secondary">
+    Starting from scratch?
+    <a href="/skeleton">Download an empty folder structure</a> and fill it in.
+  </p>
+</section>
+
+<section class="card">
+  <h2>What gets checked</h2>
+  <p class="secondary">Also available as JSON at <a href="/rules">/rules</a>.</p>
+  <ul class="rule-list">
+    {% for rule in rules %}
+    <li>
+      <span class="rule-id">{{ rule.id }}</span>
+      <div>
+        <strong>{{ rule.title }}</strong>
+        {% if rule.phases|length < 3 %}
+        <span class="badge">phase {{ rule.phases|join(", ") }} only</span>
+        {% endif %}
+        {% if rule.reference %}<p class="reference">{{ rule.reference }}</p>{% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}
