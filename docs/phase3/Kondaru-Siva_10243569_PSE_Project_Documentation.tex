@@ -6,13 +6,10 @@
 % Screenshots not yet present are shown as labelled placeholder boxes.
 %
 % Screenshots used:
-%   screenshots/kanban_board.png   (to be added)  Figure 1a
-%   screenshots/kanban_card.png    (to be added)  Figure 1b
-%   screenshots/test_run.jpg                      Figure 5
-%   screenshots/start_page.jpg                    Figure 6
-%   screenshots/report_M05.jpg                    Figure 7
-%   screenshots/render_live.jpg  Figure 8
-% =====================================================================
+%   screenshots/kanban_board.jpg                  Figure 1
+%   screenshots/report_M05.jpg                    Figure 4
+%   screenshots/start_page.jpg, test_run.jpg, render_live.jpg and
+%   screenshots/appendix/*.jpg                    Appendix A
 \documentclass[a4paper,11pt]{article}
 
 \usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
@@ -158,7 +155,7 @@ distinctive rule compares the submitted code archive with the public GitHub
 repository file by file, using the content hashes that git itself uses. The
 project was managed with Kanban, with the board moved into GitHub Projects after
 the Phase~2 feedback, the architecture is
-documented in three views including a UML component diagram, and the application
+documented in a UML component and a UML deployment view, and the application
 is verified by 73 automated tests and thirteen manual test cases. All thirteen
 functional requirements are implemented. The document closes with the remaining
 technical debt and the lessons learned.
@@ -271,7 +268,7 @@ portfolio phases \citep{Bass2021}.
 \hline
 4 & Screenshots of the real board instead of a drawing & Figure~\ref{fig:kanban}. \\
 \hline
-5 & Improve the presentation of the architecture & Three views, each with a stated purpose, a legend and a mapping to the source code (Section~\ref{sec:architecture}). \\
+5 & Improve the presentation of the architecture & Two UML views, each with a stated purpose, a legend and a mapping to the source code (Section~\ref{sec:architecture}). \\
 \hline
 6 & Test cases with specific input values and expected behaviour & Thirteen manual test cases with reproducible input files (Table~\ref{tab:manual}). \\
 \hline
@@ -416,58 +413,27 @@ Because every card names the requirements it delivers, the board can be read
 directly against Table~\ref{tab:workpackages} and Table~\ref{tab:requirements},
 which resolves the inconsistency between the drawn board and the work-package
 table pointed out in the Phase~2 feedback \citep{GitHubProjects2025}.
-Figure~\ref{fig:kanban} shows the board and one work-package card.
+Figure~\ref{fig:kanban} shows the board.
 
 \begin{figure}[!t]
 \centering
-\begin{subfigure}{\textwidth}
-\centering
 \screenshot{screenshots/kanban_board.jpg}{0.95\textwidth}{GitHub Projects board}
-\caption{Board with the work packages WP1--WP11}
-\end{subfigure}
-
-\vspace{0.4cm}
-\begin{subfigure}{\textwidth}
-\centering
-\screenshot{screenshots/kanban_card.jpg}{0.95\textwidth}{Work-package issue}
-\caption{Work-package card WP9 with its deliverable, requirement and project status}
-\end{subfigure}
-\caption{Kanban board in GitHub Projects}
+\caption{Kanban board in GitHub Projects with the work packages WP1--WP11}
 \label{fig:kanban}
 \end{figure}
 
 \subsection{Risks}\label{sec:risks}
 
-Table~\ref{tab:risks} lists each risk with its mitigation and its status at the
-end of the project; a risk register is only useful if it is revisited rather
-than written once \citep{Sommerville2020}.
-
-\begin{table}[H]
-\centering
-\caption{Risk register with mitigation and final status}
-\label{tab:risks}
-\tablesetup
-\begin{tabularx}{\textwidth}{|c|L{3.4cm}|c|c|X|L{1.6cm}|}
-\hline
-\rowcolor{gray!15}
-\textbf{ID} & \textbf{Risk} & \textbf{Prob.} & \textbf{Impact} & \textbf{Mitigation} & \textbf{Status} \\
-\hline\hline
-R1 & Scope creep through ever more rules & High & Medium & Fixed minimum rule set; further rules held in a prioritised backlog. & Closed \\
-\hline
-R2 & Ambiguity in the brief leads to a wrong rule & Medium & High & Source provision recorded for every rule and shown with each finding. & Closed \\
-\hline
-R3 & Malicious upload compromises the server & Medium & High & Limits enforced before extraction; unprivileged, read-only container. & Mitigated \\
-\hline
-R4 & Cloud deployment fails late & Medium & High & Containerised from the first increment; port taken from the environment. & Closed \\
-\hline
-R5 & Capacity loss of the single developer & Medium & High & Buffer in the final weeks; every increment deliverable on its own. & Closed \\
-\hline
-R6 & A missed violation gives false confidence & Low & High & No rule accepted without a test proving it rejects a violating submission. & Mitigated \\
-\hline
-R7 & GitHub unavailable or rate-limited & Medium & Low & Repository check degrades to a warning; optional access token. & Mitigated \\
-\hline
-\end{tabularx}
-\end{table}
+The risk register set up in the conception phase was revisited at every
+milestone, because a register is only useful if it is kept current rather than
+written once \citep{Sommerville2020}. Of its seven risks, four were closed by the
+end of the project: scope creep was held off by a fixed minimum rule set,
+ambiguity in the brief by recording the source provision of every rule, a late
+deployment failure by containerising from the first increment, and the capacity
+risk of a single developer by keeping every increment deliverable on its own. The
+other three remain mitigated rather than closed: malicious uploads (R3), a missed
+violation that gives false confidence (R6), and an unavailable or rate-limited
+GitHub (R7), which degrades the repository check to a warning.
 
 R3 and R6 shaped the design most. R3 exists because accepting an arbitrary
 archive from the internet is the one genuinely hostile interaction in the system;
@@ -595,36 +561,17 @@ the code; the entries are in alphabetical order \citep{Sommerville2020}.
 
 \subsection{Architecture Views}\label{sec:architecture}
 
-The architecture is documented in three views, each answering one question: what
-the system is connected to (Figure~\ref{fig:context}), what it consists of
-(Figure~\ref{fig:components}) and where it runs (Figure~\ref{fig:deployment}).
-Presenting an architecture as a small set of views, each readable on its own, is
-the established way of making it understandable \citep{Bass2021, Brown2024}.
+The architecture is documented in two UML views, each answering one question:
+what the system consists of (Figure~\ref{fig:components}) and where it runs
+(Figure~\ref{fig:deployment}). Presenting an architecture as a small set of
+views, each readable on its own, is the established way of making it
+understandable \citep{Bass2021, Brown2024}.
 
-\textbf{Context view.} The student is the only user and works in a web browser.
-The assignment brief is not called at runtime; it is the source from which the
-rules were derived, hence the dashed arrow. GitHub is the only external system
-the application calls, and only for rule R07. Drawing the system boundary first
-makes clear what the application is responsible for and what it depends on
-\citep{Brown2024}.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}
-\node[system]  at ( 0  , 0    ) (sys)  {PortfolioCheck\\[1pt]\normalfont\tiny web application};
-\node[actor]   at (-4.4, 0    ) (user) {Student\\\tiny (web browser)};
-\node[ext]     at ( 0  , 2.05 ) (src)  {Assignment brief\\\tiny (source of the rules)};
-\node[ext]     at ( 4.7, 0    ) (gh)   {GitHub REST API\\\tiny (public repositories)};
-\node[ext]     at ( 0  ,-2.05 ) (host) {Render cloud\\\tiny (container host)};
-\draw[flow] (user.east) -- node[above, font=\tiny, align=center] {submission\\archive} (sys.west);
-\draw[flow] (sys.south west) to[out=205, in=335] node[below, font=\tiny] {report} (user.south east);
-\draw[flow, dashed] (src.south) -- node[right, font=\tiny] {rules derived at design time} (sys.north);
-\draw[flow] (sys.east) -- node[above, font=\tiny, align=center] {file list\\(R07 only)} (gh.west);
-\draw[flow] (sys.south) -- node[right, font=\tiny] {runs on} (host.north);
-\end{tikzpicture}
-\caption{Context view}
-\label{fig:context}
-\end{figure}
+\textbf{System context.} The student is the only user and works in a web
+browser. The assignment brief is not called at runtime; it is the source from
+which the rules were derived. GitHub is the only external system the application
+calls, and only for rule R07. Stating the system boundary first makes clear what
+the application is responsible for and what it depends on \citep{Brown2024}.
 
 \textbf{Component view.} Figure~\ref{fig:components} is a UML component diagram:
 boxes are components, circles are the interfaces a component provides, and
@@ -794,10 +741,16 @@ finding holds its rule identifier and the provision of the brief it comes from.
 
 \subsection{Technology Stack}\label{sec:stack}
 
-Table~\ref{tab:stack} records each technology decision with the alternatives
-considered and why they were set aside; recording the rejected options is what
-keeps a decision reviewable later \citep{Ford2021}. All libraries are open source
-under the MIT, BSD or Apache licence.
+The application is written in Python~3.11, because archive handling and hashing
+are built into its standard library \citep{PSF2025}. It uses FastAPI as web
+framework, Jinja templates for the two pages, Uvicorn as server and pytest for
+the tests \citep{FastAPI2025, Jinja2025, Uvicorn2025, Pytest2025}; it runs as a
+Docker container on Render \citep{Docker2024, Render2025}. There is no database,
+because NFR3 forbids storing submissions, and GitHub is read with the standard
+library rather than a client package, because two read-only requests do not
+justify a dependency. Recording the rejected options with each decision keeps it
+reviewable later \citep{Ford2021}; all libraries are open source under the MIT,
+BSD or Apache licence.
 
 The web framework was the closest decision. Flask and FastAPI are both small and
 would have served; FastAPI was chosen because it validates the request at the
@@ -811,34 +764,6 @@ report, and a separate JavaScript application would have added a second build,
 a second deployment artifact and an interface contract to maintain
 \citep{Richards2020}.
 
-\begin{table}[!t]
-\centering
-\caption{Technology stack with alternatives and rationale}
-\label{tab:stack}
-\tablesetup
-\begin{tabularx}{\textwidth}{|L{2.0cm}|L{2.9cm}|L{2.3cm}|X|}
-\hline
-\rowcolor{gray!15}
-\textbf{Decision} & \textbf{Selected} & \textbf{Alternatives} & \textbf{Rationale} \\
-\hline\hline
-Language & Python 3.11 & Java, Node.js & Archive handling and hashing are built into the standard library \citep{PSF2025}; lighter tool chain than Java. \\
-\hline
-Web framework & FastAPI \citep{FastAPI2025} \newline \url{https://fastapi.tiangolo.com} & Flask \citep{Flask2025}, Django \citep{Django2025} & Django's database and admin would stay unused; FastAPI validates input where untrusted uploads arrive. \\
-\hline
-User interface & Jinja templates \citep{Jinja2025} \newline \url{https://jinja.palletsprojects.com} & React, Vue & One form and one report do not justify a second build pipeline \citep{Richards2020}. \\
-\hline
-Server & Uvicorn \citep{Uvicorn2025} \newline \url{https://www.uvicorn.org} & Gunicorn & Reference server for FastAPI; started with one command. \\
-\hline
-Persistence & None & SQLite, PostgreSQL & NFR3 forbids storing submissions; no database means no data-protection duty. \\
-\hline
-GitHub access & Standard library \texttt{urllib} & PyGithub & Two read-only requests do not justify a dependency. \\
-\hline
-Testing & pytest \citep{Pytest2025} \newline \url{https://docs.pytest.org} & \texttt{unittest} & Parameterised tests suit rules checked against compliant and violating input. \\
-\hline
-Hosting & Docker on Render \citep{Docker2024, Render2025} & Heroku, Cloud Run & Free tier that builds directly from the Dockerfile. \\
-\hline
-\end{tabularx}
-\end{table}
 
 % =====================================================================
 \section{Implementation and Evaluation}\label{sec:impl}
@@ -995,32 +920,19 @@ and the 12 \textit{sample tests} confirm that every input of
 Table~\ref{tab:manual} produces the documented result \citep{Khorikov2020}. The last group ties the manual and the automated tests
 together: the expected results in Table~\ref{tab:manual} are themselves executed
 on every run, so the specification cannot drift away from the behaviour of the
-application. Figure~\ref{fig:pytest} shows a complete run in which all 73 tests
+application. Figure~\ref{fig:pytest} in Appendix~A shows a complete run in which all 73 tests
 pass; the suite was also run from a clean extraction of the submission archive
 to confirm that the published code is self-contained \citep{Pytest2025}.
 
-\begin{figure}[!htbp]
-\centering
-\screenshot{screenshots/test_run.jpg}{0.52\textwidth}{pytest run}
-\caption{Automated test run: all 73 tests pass}
-\label{fig:pytest}
-\end{figure}
-
 \subsection{Results}\label{sec:results}
 
-Figure~\ref{fig:start} shows the start page of the running application. It
+Figure~\ref{fig:start} in Appendix~A shows the start page of the running
+application. It
 offers the upload form and the phase selection, and it lists every rule with the
 provision of the brief behind it, so a student knows exactly what will be checked
 before uploading anything (FR13). The link below the form downloads an empty,
 correctly named folder structure for students starting from nothing (FR10)
 \citep{Sommerville2020}.
-
-\begin{figure}[!ht]
-\centering
-\screenshot{screenshots/start_page.jpg}{0.62\textwidth}{Start page}
-\caption{Start page with upload form and rule catalogue}
-\label{fig:start}
-\end{figure}
 
 Figure~\ref{fig:report} shows the report for sample M05 checked as phase 3. The
 headline says the submission is not ready and counts three problems to fix, one
@@ -1091,12 +1003,8 @@ usable by an examiner without assistance \citep{Kim2021}.
 \item \textbf{Repository:} \url{https://github.com/shivakondaru94-gif/portfoliocheck-DLMCSPSE01}
 \end{itemize}
 
-\begin{figure}[H]
-\centering
-\screenshot{screenshots/render_live.jpg}{0.97\textwidth}{Render dashboard showing the service as Live}
-\caption{The application deployed on Render}
-\label{fig:render}
-\end{figure}
+Figure~\ref{fig:render} in Appendix~A shows the service running live on
+Render.
 
 % =====================================================================
 \section{Reflection}\label{sec:reflection}
@@ -1382,7 +1290,15 @@ shows the top of the page, where the failures are listed first. Case M05 is show
 in Figure~\ref{fig:report}. The phase-3 samples M06 and M07 link to the example
 repository address from the assignment brief, which does not exist, so rule R07
 reports a failure for them, as documented in the repository's sample
-description.
+description. The appendix also shows the start page, the run of the automated test suite
+and the deployed service.
+
+\begin{figure}[H]
+\centering
+\screenshot{screenshots/start_page.jpg}{0.62\textwidth}{Start page}
+\caption{Start page with upload form and rule catalogue}
+\label{fig:start}
+\end{figure}
 
 \begin{figure}[H]
 \centering
@@ -1442,6 +1358,20 @@ description.
 \centering
 \fbox{\includegraphics[width=0.97\textwidth]{screenshots/appendix/health_endpoint.jpg}}
 \caption{Health endpoint at \texttt{/health}, used by the cloud host to monitor the service}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\screenshot{screenshots/render_live.jpg}{0.97\textwidth}{Render dashboard showing the service as Live}
+\caption{The application deployed on Render}
+\label{fig:render}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\screenshot{screenshots/test_run.jpg}{0.52\textwidth}{pytest run}
+\caption{Automated test run: all 73 tests pass}
+\label{fig:pytest}
 \end{figure}
 
 \end{document}
